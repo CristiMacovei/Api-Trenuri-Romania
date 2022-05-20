@@ -1,0 +1,8 @@
+# environment
+.env
+
+# databases
+*.sqlite3
+
+# dependencies
+node_modules/
