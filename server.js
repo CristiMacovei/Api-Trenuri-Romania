@@ -5,6 +5,7 @@ const { Sequelize, DataTypes } = require('sequelize')
 
 const LoginRoute = require('./routes/login-route')
 const SignupRoute = require('./routes/signup-route')
+const AuthRoute = require('./routes/auth-route')
 
 //? initialise the app
 const app = express()
@@ -24,6 +25,10 @@ usersSequelize.define('User', {
     unique: true,
   },
   password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  token: {
     type: DataTypes.STRING,
     allowNull: false,
   }
@@ -51,5 +56,8 @@ app.post('/login', async (req, res) => LoginRoute.post(req, res, usersSequelize)
 
 //? POST /signup
 app.post('/signup', async (req, res) => SignupRoute.post(req, res, usersSequelize))
+
+//? POST /auth
+app.post('/auth', async (req, res) => AuthRoute.post(req, res, usersSequelize))
 
 main()

@@ -27,11 +27,13 @@ async function post(req, res, db) {
   }
 
   const hashedPassword = sha256(process.env.PASSWORD_ENCRYPTION_ADDON + password)
+  const token = sha256(process.env.TOKEN_ENCRYPTION_ADDON + username + password)
 
   try {
     const user = await db.models.User.create({
       username,
-      password: hashedPassword
+      password: hashedPassword,
+      token
     })
 
     res.json({
