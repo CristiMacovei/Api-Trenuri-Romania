@@ -16,6 +16,7 @@ async function post(req, res, db) {
   }
 
   try {
+    // gen da
     const user = await db.models.User.findOne({
       token
     })

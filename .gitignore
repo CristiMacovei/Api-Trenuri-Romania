@@ -6,3 +6,6 @@
 
 # dependencies
 node_modules/
+
+# json
+dataset/*.json

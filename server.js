@@ -7,6 +7,10 @@ const LoginRoute = require('./routes/login-route')
 const SignupRoute = require('./routes/signup-route')
 const AuthRoute = require('./routes/auth-route')
 
+// const dataTrains = require('./dataset/q-trains.json')
+const dataStations = require('./dataset/q-stations.json')
+const dataGraph = require('./dataset/q-graph.json')
+
 //? initialise the app
 const app = express()
 app.use(express.json())
@@ -37,7 +41,7 @@ usersSequelize.define('User', {
 //? start up process
 async function main() {
   //? start the express server
-  app.listen(1001, () => {
+  app.listen(process.env.PORT | 1001, () => {
     console.log('running on rocket fuel')
   })
 
@@ -59,5 +63,20 @@ app.post('/signup', async (req, res) => SignupRoute.post(req, res, usersSequeliz
 
 //? POST /auth
 app.post('/auth', async (req, res) => AuthRoute.post(req, res, usersSequelize))
+
+//? GET /data/trains
+// app.get('/data/trains', async (req, res) => {
+//   res.json(dataTrains)
+// })
+
+//? GET /data/stations
+app.get('/data/stations', async (req, res) => {
+  res.json(dataStations)
+})
+
+//? GET /data/graph
+app.get('/data/graph', async (req, res) => {
+  res.json(dataGraph)
+})
 
 main()
