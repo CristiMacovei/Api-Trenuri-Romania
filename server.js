@@ -6,6 +6,7 @@ const { Sequelize, DataTypes } = require('sequelize')
 const LoginRoute = require('./routes/login-route')
 const SignupRoute = require('./routes/signup-route')
 const AuthRoute = require('./routes/auth-route')
+const FindPathRoute = require('./routes/find-path-route')
 
 // const dataTrains = require('./dataset/q-trains.json')
 const dataStations = require('./dataset/q-stations.json')
@@ -56,13 +57,19 @@ async function main() {
 }
 
 //? POST /login
-app.post('/login', async (req, res) => LoginRoute.post(req, res, usersSequelize))
+app.post('/login', async (req, res) => {
+  LoginRoute.post(req, res, usersSequelize)
+})
 
 //? POST /signup
-app.post('/signup', async (req, res) => SignupRoute.post(req, res, usersSequelize))
+app.post('/signup', async (req, res) => {
+  SignupRoute.post(req, res, usersSequelize)
+})
 
 //? POST /auth
-app.post('/auth', async (req, res) => AuthRoute.post(req, res, usersSequelize))
+app.post('/auth', async (req, res) => {
+  AuthRoute.post(req, res, usersSequelize)
+})
 
 //? GET /data/trains
 // app.get('/data/trains', async (req, res) => {
@@ -76,7 +83,13 @@ app.get('/data/stations', async (req, res) => {
 
 //? GET /data/graph
 app.get('/data/graph', async (req, res) => {
-  res.json(dataGraph)
+  FindPathRoute.get(req, res, dataGraph)
+})
+
+
+//? GET /path
+app.get('/path', async (req, res) => {
+  FindPathRoute.get(req, res, dataGraph.graph)
 })
 
 main()

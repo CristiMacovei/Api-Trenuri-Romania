@@ -46,19 +46,26 @@ fs.readFile('./dataset/trains.xml', 'utf-8')
       const originId = station['_attributes']['CodStaOrigine']
       const destId = station['_attributes']['CodStaDest']
 
+      const delta = parseInt(station['_attributes']['OraS']) - parseInt(station['_attributes']['OraP'])
+
+      if (destId === originId) {
+        return
+      }
+
       if (!graph.has(originId)) {
         graph.set(originId, [])
       }
 
       graph.get(originId).push({
         trainId: train['_attributes']['Numar'],
+        time: delta,
         to: destId
       })
     })
   })
 
   fs.writeFile('./dataset/q-graph.json', JSON.stringify({
-    graph: Array.from(graph.entries())
+    graph: Object.fromEntries(graph)
   }, null, 3))
   .then(() => { console.log('Graph written to /dataset/q-graph.json') })
 })
