@@ -12,25 +12,39 @@ fs.readFile('./dataset/trains.xml', 'utf-8')
   //? fill stations
   const trainStations = new Map()
   trains.forEach(train => {
-    const stations = train['Trase']['Trasa']['ElementTrasa']
-
-    trainStations.set(
-      stations[0]['_attributes']['CodStaOrigine'],
-      stations[0]['_attributes']['DenStaOrigine']
-    )
+    const stations = train['Trase']['Trasa']['ElementTrasa']    
 
     stations.forEach(station => {
-      trainStations.set(
-        station['_attributes']['CodStaDest'],
-        station['_attributes']['DenStaDestinatie']
-      )
+      if (!trainStations.has(station['_attributes']['CodStaOrigine'])) {
+        trainStations.set(
+          station['_attributes']['CodStaOrigine'],
+          {
+            name: station['_attributes']['DenStaOrigine'],
+            hours: new Set()
+          }
+        )
+      }
+      trainStations.get(station['_attributes']['CodStaOrigine']).hours.add(station['_attributes']['OraP'])
+
+      if (!trainStations.has(station['_attributes']['CodStaDest'])) {
+        trainStations.set(
+          station['_attributes']['CodStaDest'],
+          {
+            name: station['_attributes']['DenStaDestinatie'],
+            hours: new Set()
+          }
+        )
+      }
+      trainStations.get(station['_attributes']['CodStaDest']).hours.add(station['_attributes']['OraS'])
     })
   })
 
   fs.writeFile('./dataset/q-stations.json', JSON.stringify({
-    stations: Array.from(trainStations.entries()).map(([id, name]) => {
+    stations: Array.from(trainStations.entries()).map(([id, {name, hours}]) => {
       return {
-        stationId: id, stationName: name
+        stationId: id, 
+        stationName: name,
+        hours: Array.from(hours)
       }
     })
   }, null, 3))
@@ -46,7 +60,9 @@ fs.readFile('./dataset/trains.xml', 'utf-8')
       const originId = station['_attributes']['CodStaOrigine']
       const destId = station['_attributes']['CodStaDest']
 
-      const delta = parseInt(station['_attributes']['OraS']) - parseInt(station['_attributes']['OraP'])
+
+      const departureTime = parseInt(station['_attributes']['OraP'])
+      const arrivalTime = parseInt(station['_attributes']['OraS'])
 
       if (destId === originId) {
         return
@@ -58,8 +74,8 @@ fs.readFile('./dataset/trains.xml', 'utf-8')
 
       graph.get(originId).push({
         trainId: train['_attributes']['Numar'],
-        time: delta,
-        to: destId
+        to: destId,
+        departureTime, arrivalTime
       })
     })
   })

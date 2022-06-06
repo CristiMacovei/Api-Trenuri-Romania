@@ -7,6 +7,7 @@ const LoginRoute = require('./routes/login-route')
 const SignupRoute = require('./routes/signup-route')
 const AuthRoute = require('./routes/auth-route')
 const FindPathRoute = require('./routes/find-path-route')
+const FindPathRoute2 = require('./routes/find-path-route-v2')
 
 // const dataTrains = require('./dataset/q-trains.json')
 const dataStations = require('./dataset/q-stations.json')
@@ -90,6 +91,11 @@ app.get('/data/graph', async (req, res) => {
 //? GET /path
 app.get('/path', async (req, res) => {
   FindPathRoute.get(req, res, dataGraph.graph)
+})
+
+//? GET /path/v2
+app.get('/path/v2', async (req, res) => {
+  FindPathRoute2.get(req, res, dataStations.stations, dataGraph.graph)
 })
 
 main()

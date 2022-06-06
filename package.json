@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node --max-old-space-size=4096 server.js",
     "dev": "nodemon server.js",
     "parse-win": "del dataset\\*.json && node parseData.js",
     "parse": "rm -rf dataset/*.json && node parseData.js",
