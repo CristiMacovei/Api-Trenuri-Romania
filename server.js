@@ -40,6 +40,23 @@ usersSequelize.define('User', {
   }
 })
 
+usersSequelize.define('HistoryEntry', {
+  userToken: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  originId: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  destId: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+}, {
+  tableName: 'history'
+})
+
 //? start up process
 async function main() {
   //? start the express server

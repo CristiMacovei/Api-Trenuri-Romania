@@ -1,4 +1,8 @@
+//? heap is a datastructure used for dijkstra's algorithm 
 const { MinHeap } = require("@datastructures-js/heap")
+
+//? used to validate strings to make sure we don't receive requests with empty parameters 
+const { validate } = require('../other/validate-string')
 
 function dijkstra(startId, destId, graph, startHour) {
   let heap = new MinHeap(node => node.time)
@@ -63,8 +67,29 @@ async function get(req, res, stations, graph) {
   const originId = req.query.startId
   const destId = req.query.destId
 
-  const hours = stations.filter(station => station.stationId === originId)[0]?.hours.map(hour => parseInt(hour))
+  //? validate ids
+  const originValidation = validate(originId)
+  const destValidation = validate(destId)
 
+  if (!originValidation.valid) {
+    res.json({
+      'status': 'error',
+      'message': `Origin is invalid, reason: ${originValidation.reason}`
+    })
+
+    return
+  }
+
+  if (!destValidation.valid) {
+    res.json({
+      'status': 'error',
+      'message': `Origin is invalid, reason: ${originValidation.reason}`
+    })
+
+    return
+  }
+
+  const hours = stations.filter(station => station.stationId === originId)[0]?.hours.map(hour => parseInt(hour))
 
   //? maps arrival time to best path 
   let paths = new Map()
