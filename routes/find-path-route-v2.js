@@ -14,7 +14,6 @@ function dijkstra(startId, destId, graph, startHour) {
   //? prev map
   let prevMap = new Map()
 
-
   timeMap.set(startId, startHour);
   prevMap.set(startId, null)
   heap.insert({ id: startId, time: startHour });
@@ -63,9 +62,38 @@ function dijkstra(startId, destId, graph, startHour) {
   };
 }
 
-async function get(req, res, stations, graph) {
+async function get(req, res, stations, graph, db) {
   const originId = req.query.startId
   const destId = req.query.destId
+
+  console.log(req.headers)
+
+  //? validate token
+  const token = req.headers.authorization
+  console.log(token)
+
+  const tokenValidation = validate(token)
+  if (!tokenValidation.valid) {
+    res.json({
+      status: 'error',
+      message: `Token is invalid, reason: ${tokenValidation.reason}`
+    })
+
+    return
+  }
+
+  const user = await db.models.User.findOne({
+    token
+  })
+
+  if (user === null) {
+    res.json({
+      status: 'error',
+      message: 'Invalid credentials'
+    })
+
+    return
+  }
 
   //? validate ids
   const originValidation = validate(originId)
@@ -129,7 +157,18 @@ async function get(req, res, stations, graph) {
   }).sort((nigger1, nigger2) => {
     return (nigger1.arrivalTime - nigger1.departureTime) - (nigger2.arrivalTime - nigger2.departureTime)
   })
+
+  //? add history entry to db 
+  console.log(token)
+  const entry = await db.models.HistoryEntry.create({
+    userToken: token,
+    originId,
+    destId
+  })
+
+  await entry.save()
   
+  //? send response 
   res.json({
     status: 'success',
     route: {
