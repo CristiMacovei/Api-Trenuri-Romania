@@ -83,7 +83,9 @@ async function get(req, res, stations, graph, db) {
   }
 
   const user = await db.models.User.findOne({
-    token
+    where: {
+      token
+    }
   })
 
   if (user === null) {
