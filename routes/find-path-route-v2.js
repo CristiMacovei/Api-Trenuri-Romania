@@ -156,8 +156,8 @@ async function get(req, res, stations, graph, db) {
       arrivalTime,
       ...path
     }
-  }).sort((nigger1, nigger2) => {
-    return (nigger1.arrivalTime - nigger1.departureTime) - (nigger2.arrivalTime - nigger2.departureTime)
+  }).sort((first, second) => {
+    return (first.arrivalTime - first.departureTime) - (second.arrivalTime - second.departureTime)
   })
 
   //? add history entry to db 

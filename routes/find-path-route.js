@@ -67,7 +67,7 @@ async function get(req, res, graph) {
       destStationId: destId,
     },
     // graph,
-    nigger: dist.get(destId),
+    destTime: dist.get(destId),
     path
   })
 }

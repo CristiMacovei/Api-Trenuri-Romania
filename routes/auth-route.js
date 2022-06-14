@@ -1,6 +1,5 @@
 require('dotenv').config()
 const { validate } = require('../other/validate-string')
-const { sha256 } = require('js-sha256')
 
 async function post(req, res, db) {
   const token = req.body.token
@@ -17,7 +16,9 @@ async function post(req, res, db) {
 
   try {
     const user = await db.models.User.findOne({
-      token
+      where: {
+        token
+      }
     })
 
     if (user === null) {
