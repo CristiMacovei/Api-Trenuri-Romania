@@ -121,4 +121,9 @@ app.get('/history', async (req, res) => {
   HistoryRoute.get(req, res, dataStations.stations, usersSequelize)
 })
 
+//? GET /location
+app.get('/location', async (req, res) => {
+  
+})
+
 main()

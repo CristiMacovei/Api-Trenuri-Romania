@@ -134,6 +134,20 @@ async function get(req, res, stations, graph, db) {
       current = prevMap.get(current.id)
     }
 
+    path.reverse();
+
+    for (let i = 0; i < path.length; i++) {
+      const stationId = path[i].id;
+
+      const stationName = stations.filter(station => station.stationId === stationId)[0]?.stationName;
+
+      path[i] = {
+        ...path[i],
+        name: stationName
+      };
+    }
+    console.log(path);
+
     const arrivalTime = timeMap.get(destId)
     if (paths.has(arrivalTime)) {
       if (paths.get(arrivalTime).departureTime > hour) {

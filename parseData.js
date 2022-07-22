@@ -73,7 +73,7 @@ fs.readFile('./dataset/trains.xml', 'utf-8')
       }
 
       graph.get(originId).push({
-        trainId: train['_attributes']['Numar'],
+        trainId: train['_attributes']['CategorieTren'] + train['_attributes']['Numar'],
         to: destId,
         departureTime, arrivalTime
       })
