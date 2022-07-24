@@ -139,11 +139,13 @@ async function get(req, res, stations, graph, db) {
     for (let i = 0; i < path.length; i++) {
       const stationId = path[i].id;
 
-      const stationName = stations.filter(station => station.stationId === stationId)[0]?.stationName;
+      const station = stations.filter(station => station.stationId === stationId)[0];
 
       path[i] = {
         ...path[i],
-        name: stationName
+        name: station?.stationName,
+        latitude: station?.latitude,
+        longitude: station?.longitude
       };
     }
     console.log(path);
